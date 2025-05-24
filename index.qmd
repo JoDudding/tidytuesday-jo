@@ -1,0 +1,81 @@
+---
+title: "tidytuesday-jo"
+format: html
+---
+
+```{r}
+#| label: setup
+#| echo: false
+#| message: false
+#| warning: false
+
+source("scripts/_setup.r")
+
+```
+
+Website for my #tidytuesday experiments
+
+Currently working on the setup
+
+::: {.callout-note}
+## TODO
+
+- Make charts fit the space
+- move caption
+- add logo
+- create template for each #tidytuesday
+- link to #tidytuesday
+
+:::
+
+
+```{r}
+#| label: fig-penguin-hist
+#| fig-cap: Palmer penguins species flipper length
+#| echo: false
+
+penguins |> 
+  filter(! is.na(flipper_len)) |> 
+  ggplot(aes(flipper_len)) +
+  geom_histogram(binwidth = 3) +
+  facet_wrap(~species, ncol = 1) +
+  scale_y_c() +
+  labs(
+    x = "Flipper length",
+    y = "Count",
+    title = "Gentoo penguins have the longest flippers",
+    subtitle = "Distribution of flipper length by penguin species",
+    caption = "Source: Palmer Penguins"
+  )
+
+```
+
+
+```{r}
+#| label: fig-penguin-scatter
+#| fig-cap: Palmer penguins species flipper length by bill length
+#| echo: false
+
+penguins |> 
+  filter(
+    ! is.na(flipper_len),
+    ! is.na(bill_len)
+  ) |> 
+  ggplot(aes(flipper_len, bill_len, colour = species)) +
+  geom_point() +
+  scale_x_continuous(label = comma) +
+  scale_y_continuous(label = comma) +
+  scale_colour_pulse() +
+  labs(
+    x = "Flipper length",
+    y = "Bill length",
+    colour = NULL,
+    #title = "There are distinct clusters for the different species",
+    subtitle = "Flipper length vs bill length by penguin species",
+    caption = "Source: Palmer Penguins"
+  )
+
+```
+
+
+

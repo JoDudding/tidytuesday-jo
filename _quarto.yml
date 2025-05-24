@@ -1,0 +1,25 @@
+project:
+  type: website
+
+website:
+  title: "Jo's #tidytuesday"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+    tools:
+      - icon: github
+        href: https://github.com/JoDudding/tidytuesday-jo
+      - icon: linkedin
+        href: https://www.linkedin.com/in/jo-dudding-18bbaa16/
+
+format:
+  html:
+    theme: pulse
+    #css: assets/styles.css
+    toc: true
+    
+
+knitr:
+  opts_chunk:
+    dev: "ragg_png"    
