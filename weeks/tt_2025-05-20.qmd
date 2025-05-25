@@ -194,12 +194,12 @@ water_quality <- tt$water_quality |>
   ungroup() |> 
   mutate(
     worst_colour = case_when(
-      worst > 2500 ~ pulse$primary_gradient(7)[7],
-      worst > 1000 ~ pulse$primary_gradient(7)[6],
-      worst >  500 ~ pulse$primary_gradient(7)[5],
-      worst >  250 ~ pulse$primary_gradient(7)[4],
-      worst >  100 ~ pulse$primary_gradient(7)[3],
-      worst >   50 ~ pulse$primary_gradient(7)[2],
+      worst > 2500 ~ pulse$primary_gradient(7)[2],
+      worst > 1000 ~ pulse$primary_gradient(7)[3],
+      worst >  500 ~ pulse$primary_gradient(7)[4],
+      worst >  250 ~ pulse$primary_gradient(7)[5],
+      worst >  100 ~ pulse$primary_gradient(7)[6],
+      worst >   50 ~ pulse$primary_gradient(7)[7],
       TRUE ~ pulse$primary_gradient(7)[1]
     ),
     label = glue("
