@@ -1,0 +1,17 @@
+{
+  "hash": "ed2c8a6ccb99e9c08b6c08ce8f48ceed",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"#TidyTuesday 2025-05-20: Water Quality at Sydney Beaches\"\nformat: html\nexecute: \n  freeze: auto\n---\n\n# Background\n\nThis week we're exploring the water quality of Sydney's iconic beaches. The data is available at the New South Wales State Government [Beachwatch website](https://www.beachwatch.nsw.gov.au/waterMonitoring/waterQualityData).\n\n> Beachwatch and our partners monitor water quality at swim sites to ensure that recreational water environments are managed as safely as possible so that as many people as possible can benefit from using the water.\n\n[Sydney beaches were in the news](https://www.abc.net.au/news/2025-01-10/pollution-risks-in-sydney-beaches-contaminated-waterways-rain/104790856.) this summer with high rainfall causing concerns about the safety of the water.\n\nThe dataset this week includes both water quality and [historical weather data](https://open-meteo.com/) from 1991 until 2025.\n\n- Has the water quality declined over this period?\n- How does rainfall impact E-coli bacteria levels?\n- Are some swimming sites particularly prone to high bacteria levels following rain?\n\n\n::: {.cell}\n\n:::\n\n\n# Load the weekly data and check the [readme](https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-05-20)\n\n\n\n\n\n# Analyse\n\n## Ideas\n\n- leaflet map\n- popup with a sparkline\n- change in extreme rainfall days\n\n## Weather trends\n\n\n::: {.cell}\n::: {.cell-output-display}\n![Cumulative rainfall for Sydney](tt_2025-05-20_files/figure-html/fig-cum-rainfall-1.png){#fig-cum-rainfall width=672}\n:::\n:::\n\n\n\n::: {.cell}\n::: {.cell-output-display}\n![Annual rainfall for Sydney](tt_2025-05-20_files/figure-html/fig-annual-rainfall-1.png){#fig-annual-rainfall width=672}\n:::\n:::\n\n\n",
+    "supporting": [
+      "tt_2025-05-20_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

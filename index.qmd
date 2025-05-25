@@ -1,30 +1,29 @@
 ---
 title: "tidytuesday-jo"
 format: html
+listing: 
+  type: default
+  contents: weeks
 ---
 
 ```{r}
 #| label: setup
-#| echo: false
-#| message: false
-#| warning: false
-
-source("scripts/_setup.r")
+#| file: scripts/_setup.r
 
 ```
 
-Website for my #tidytuesday experiments
+Website for my [#tidytuesday](https://github.com/rfordatascience/tidytuesday) experiments, playing with different data and packages.
 
-Currently working on the setup
 
 ::: {.callout-note}
 ## TODO
 
+Currently working on the setup
+
 - Make charts fit the space
-- move caption
 - add logo
-- create template for each #tidytuesday
-- link to #tidytuesday
+- remove placeholder charts
+- picture for listing post
 
 :::
 

@@ -32,6 +32,37 @@ library(glue, quietly = TRUE)
 library(tidytuesdayR, quietly = TRUE)
 library(systemfonts, quietly = TRUE)
 
+#--- function for new template ---
+
+use_tt_template <- function(ref_date = lubridate::today()) {
+  
+  # convert string to date
+  ref_date <- lubridate::as_date(ref_date)
+  
+  # go back to the latest tuesday
+  tt_date <- withr::with_options(
+    list(lubridate.week.start = 2),
+    lubridate::floor_date(ref_date, "week", 2)
+  ) |> 
+    as.character()
+  
+  # read the master quarto template
+  x1 <- readLines("templates/tt_quarto.qmd")
+  
+  # update the date
+  x2 <- gsub( "tt_date", tt_date, x = x1 )
+  
+  # and the year
+  x3 <- gsub( "tt_date", stringr::str_sub(tt_date, 1, 4), x = x2 )
+  
+  # write to this project
+  writeLines(x3, glue::glue("weeks/tt_{tt_date}.qmd"))
+  
+  # open the quarto
+  usethis::edit_file(glue::glue("weeks/tt_{tt_date}.qmd"))
+  
+}
+
 #--- fonts ---
 
 #"Segoe UI", 

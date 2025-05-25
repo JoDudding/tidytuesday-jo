@@ -1,6 +1,9 @@
 project:
   type: website
-
+  execute-dir: project
+  render: 
+    - "*.qmd"
+    - "!templates/"
 website:
   title: "Jo's #tidytuesday"
   navbar:
@@ -18,8 +21,17 @@ format:
     theme: pulse
     #css: assets/styles.css
     toc: true
-    
+    embed-resources: true
+    fig-cap-location: margin
+    tbl-cap-location: margin
+
+execute:     
+  echo: false
+  message: false
+  warning: false
 
 knitr:
   opts_chunk:
-    dev: "ragg_png"    
+    dev: "ragg_png"   
+
+date-format: iso  

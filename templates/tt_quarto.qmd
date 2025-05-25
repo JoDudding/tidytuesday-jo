@@ -1,0 +1,46 @@
+---
+title: "#TidyTuesday tt_date: {ADD TITLE}"
+format: html
+---
+
+# Background
+
+{EXPLAIN THIS WEEK'S DATA}
+
+```{r}
+#| label: setup
+#| echo: false
+#| message: false
+#| warning: false
+#| file: scripts/_setup.r
+
+```
+
+# Load the weekly data and check the [readme](https://github.com/rfordatascience/tidytuesday/tree/main/data/tt_year/tt_date)
+
+```{r}
+#| label: load-data
+#| include: false
+
+if(file.exists("data/tt_tt_date.rds")) {
+  # use the existing version if already downloaded
+  tt <- readRDS("data/tt_tt_date.rds")
+} else {
+  # otherwise download the datasets for the week
+  tt <- tt_load("tt_date")
+  saveRDS(tt, "data/tt_tt_date.rds")
+}
+
+map(tt, glimpse)
+
+```
+
+
+# Analyse
+
+```{r}
+#| label: tidy
+
+
+```
+
