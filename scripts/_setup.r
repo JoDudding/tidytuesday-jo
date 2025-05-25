@@ -106,6 +106,8 @@ pulse <- list(
   grey_90 = "#17141f"
 )
 
+pulse$primary_gradient <- colorRampPalette(c(pulse$primary, pulse$grey_30))
+
 #--- ggplot theme ---
 
 base_size <- 10
@@ -170,4 +172,41 @@ scale_colour_pulse <- function(...) {
 scale_fill_pulse <- function(...) {
   scale_fill_manual(..., values = c(pulse$indigo, pulse$orange, pulse$pink, 
     pulse$teal))
+}
+
+#--- summaryx function ---
+
+
+summaryx <- function(data, var) {
+  data |> 
+    summarise(
+      min = min({{ var }}, na.rm = TRUE),
+      p1 = quantile({{ var }}, probs = 0.01, na.rm = TRUE, names = FALSE),
+      p5 = quantile({{ var }}, probs = 0.05, na.rm = TRUE, names = FALSE),
+      p10 = quantile({{ var }}, probs = 0.1, na.rm = TRUE, names = FALSE),
+      p25 = quantile({{ var }}, probs = 0.25, na.rm = TRUE, names = FALSE),
+      p33 = quantile({{ var }}, probs = 0.33, na.rm = TRUE, names = FALSE),
+      median = median({{ var }}, na.rm = TRUE),
+      p67 = quantile({{ var }}, probs = 0.67, na.rm = TRUE, names = FALSE),
+      p75 = quantile({{ var }}, probs = 0.75, na.rm = TRUE, names = FALSE),
+      p90 = quantile({{ var }}, probs = 0.9, na.rm = TRUE, names = FALSE),
+      p95 = quantile({{ var }}, probs = 0.95, na.rm = TRUE, names = FALSE),
+      p99 = quantile({{ var }}, probs = 0.99, na.rm = TRUE, names = FALSE),
+      max = max({{ var }}, na.rm = TRUE),
+      n_obs = n(),
+      sum = sum({{ var }}, na.rm = TRUE),
+      mean = mean({{ var }}, na.rm = TRUE),
+      sd = sd({{ var }}, na.rm = TRUE),
+      lci_95 = mean({{ var }}, na.rm = TRUE) - 
+        qnorm(0.975) * sd({{ var }}, na.rm = TRUE),
+      uci_95 = mean({{ var }}, na.rm = TRUE) + 
+        qnorm(0.975) * sd({{ var }}, na.rm = TRUE),
+      n_miss = sum(is.na({{ var }})),
+      n_zero = sum({{ var }} == 0, na.rm = TRUE),
+      pct_miss = mean(is.na({{ var }})),
+      .groups = "drop"
+    ) |>
+    mutate(
+      pct_zero = n_zero / n_obs
+    )
 }

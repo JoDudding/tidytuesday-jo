@@ -1,0 +1,15 @@
+{
+  "hash": "6b16cd12d6a50a5ce1f53c3ebfaacdd6",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"tidytuesday-jo\"\nformat: html\nlisting: \n  type: default\n  contents: weeks\n---\n\n\n::: {.cell}\n\n:::\n\n\nWebsite for my [#tidytuesday](https://github.com/rfordatascience/tidytuesday) experiments, playing with different data and packages.\n\n\n::: {.callout-note}\n## TODO\n\nCurrently working on the setup\n\n- Make charts fit the space\n- Github pages\n\n:::\n\n\n\n::: {.cell}\n\n:::\n\n\n\n\n::: {.cell}\n\n:::\n\n\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

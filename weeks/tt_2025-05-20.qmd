@@ -1,8 +1,7 @@
 ---
 title: "#TidyTuesday 2025-05-20: Water Quality at Sydney Beaches"
 format: html
-execute: 
-  freeze: auto
+image: ../images/tt-2025-05-20-precipitation-days.png
 ---
 
 # Background
@@ -23,8 +22,6 @@ The dataset this week includes both water quality and [historical weather data](
 #| label: setup
 #| file: scripts/_setup.r
 
-library(leaflet, quietly = TRUE)
-library(gt, quietly = TRUE)
 ```
 
 # Load the weekly data and check the [readme](https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-05-20)
@@ -48,12 +45,6 @@ map(tt, glimpse)
 
 
 # Analyse
-
-## Ideas
-
-- leaflet map
-- popup with a sparkline
-- change in extreme rainfall days
 
 ## Weather trends
 
@@ -116,7 +107,6 @@ cum_annual_rainfall |>
   ) +
   guides(linewidth = "none")
 
-
 ```
 
 ```{r}
@@ -140,6 +130,102 @@ cum_annual_rainfall |>
     title = "Annual rainfall has been increasing",
     subtitle = "Trend of annual rainfall for Sydney"
   )
+
+```
+
+```{r}
+#| label: fig-rainfall-dist-trend
+#| fig-cap: Distribution of precipitation per day in Sydney
+
+cum_annual_rainfall |>
+  mutate(
+    precip_band = case_when(
+      precipitation_mm == 0 ~ "0",
+      precipitation_mm <= 1 ~ "<= 1mm",
+      precipitation_mm <= 2 ~ "1-2mm",
+      precipitation_mm <= 5 ~ "2-5mm",
+      precipitation_mm <= 10 ~ "5-10mm",
+      precipitation_mm <= 20 ~ "10-20mm",
+      TRUE ~ ">20mm"
+    ) |> 
+      fct_reorder(-precipitation_mm)
+  ) |> 
+  count(year, precip_band) |> 
+  filter(! sum(n) < 365) |> 
+  group_by(year) |> 
+  mutate(pct = n / sum(n)) |> 
+  ggplot(aes(year, pct, fill = precip_band)) +
+  geom_col() +
+  geom_hline(yintercept = (1:10) * 0.1, colour = pulse$light, linewidth = 0.15) +
+  scale_x_continuous(breaks = seq(1990, 2030, by = 5)) +
+  scale_y_c(label = percent, breaks = (1:10) * 0.1) +
+  scale_fill_manual(values = pulse$primary_gradient(7)) +
+  labs(
+    x = "Year",
+    y = "% of days",
+    fill = "Precipitation",
+    title = "The percent of days with no rain is declining",
+    subtitle = "Distribution of precipitation per day in Sydney over time"
+  )
+
+ggsave("images/tt-2025-05-20-precipitation-days.png", width = 5, height = 3.5)
+
+```
+
+## Water quality
+
+
+```{r}
+#| label: fig-leaflet-best-worst-2025
+#| fig-cap: Map of worst Enterococci bacteria level in 2025 by swim site
+
+library(leaflet, quietly = TRUE)
+library(gt, quietly = TRUE)
+
+water_quality <- tt$water_quality |> 
+  filter(year(date) == max(year(date))) |> 
+  filter(! is.na(enterococci_cfu_100ml)) |> 
+  group_by(region, council, swim_site, latitude, longitude) |> 
+  summarise(
+    n = n(),
+    best  = min(enterococci_cfu_100ml), 
+    worst = max(enterococci_cfu_100ml)
+  ) |> 
+  ungroup() |> 
+  mutate(
+    worst_colour = case_when(
+      worst > 2500 ~ pulse$primary_gradient(7)[7],
+      worst > 1000 ~ pulse$primary_gradient(7)[6],
+      worst >  500 ~ pulse$primary_gradient(7)[5],
+      worst >  250 ~ pulse$primary_gradient(7)[4],
+      worst >  100 ~ pulse$primary_gradient(7)[3],
+      worst >   50 ~ pulse$primary_gradient(7)[2],
+      TRUE ~ pulse$primary_gradient(7)[1]
+    ),
+    label = glue("
+    <strong>{swim_site}</strong><br>
+    {council}<br>
+    Number of readings {n}<br>
+    Worst Enterococci bacteria level: {worst}<br>
+    Best Enterococci bacteria level: {best}<br>
+    ") |> 
+      map(html)
+  ) 
+
+water_quality |> 
+  leaflet() |> 
+  addProviderTiles(providers$Esri.WorldGrayCanvas) |> 
+  setView(151.2007, -33.87129, zoom = 12) |> 
+  addCircleMarkers(
+    stroke = FALSE,
+    color = ~worst_colour,
+    fillOpacity = 0.8,
+    label = ~label
+  )
+
+
+
+
 
 ```
 

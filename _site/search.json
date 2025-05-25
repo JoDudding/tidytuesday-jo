@@ -7,24 +7,24 @@
     "text": "This week we’re exploring the water quality of Sydney’s iconic beaches. The data is available at the New South Wales State Government Beachwatch website.\n\nBeachwatch and our partners monitor water quality at swim sites to ensure that recreational water environments are managed as safely as possible so that as many people as possible can benefit from using the water.\n\nSydney beaches were in the news this summer with high rainfall causing concerns about the safety of the water.\nThe dataset this week includes both water quality and historical weather data from 1991 until 2025.\n\nHas the water quality declined over this period?\nHow does rainfall impact E-coli bacteria levels?\nAre some swimming sites particularly prone to high bacteria levels following rain?"
   },
   {
-    "objectID": "weeks/tt_2025-05-20.html#ideas",
-    "href": "weeks/tt_2025-05-20.html#ideas",
-    "title": "#TidyTuesday 2025-05-20: Water Quality at Sydney Beaches",
-    "section": "Ideas",
-    "text": "Ideas\n\nleaflet map\npopup with a sparkline\nchange in extreme rainfall days"
-  },
-  {
     "objectID": "weeks/tt_2025-05-20.html#weather-trends",
     "href": "weeks/tt_2025-05-20.html#weather-trends",
     "title": "#TidyTuesday 2025-05-20: Water Quality at Sydney Beaches",
     "section": "Weather trends",
-    "text": "Weather trends\n\n\n\n\n\n\n\n\nFigure 1: Cumulative rainfall for Sydney\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 2: Annual rainfall for Sydney"
+    "text": "Weather trends\n\n\n\n\n\n\n\n\nFigure 1: Cumulative rainfall for Sydney\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 2: Annual rainfall for Sydney\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 3: Distribution of precipitation per day in Sydney"
+  },
+  {
+    "objectID": "weeks/tt_2025-05-20.html#water-quality",
+    "href": "weeks/tt_2025-05-20.html#water-quality",
+    "title": "#TidyTuesday 2025-05-20: Water Quality at Sydney Beaches",
+    "section": "Water quality",
+    "text": "Water quality\n\n\n\n\n\n\n\n\nFigure 4: Map of worst Enterococci bacteria level in 2025 by swim site"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "tidytuesday-jo",
     "section": "",
-    "text": "Website for my #tidytuesday experiments, playing with different data and packages.\n\n\n\n\n\n\nTODO\n\n\n\nCurrently working on the setup\n\nMake charts fit the space\nadd logo\nremove placeholder charts\npicture for listing post\n\n\n\n\n\n\n\n\n\n\n\nFigure 1: Palmer penguins species flipper length\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 2: Palmer penguins species flipper length by bill length\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTidyTuesday 2025-05-20: Water Quality at Sydney Beaches\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Website for my #tidytuesday experiments, playing with different data and packages.\n\n\n\n\n\n\nTODO\n\n\n\nCurrently working on the setup\n\nMake charts fit the space\nGithub pages\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTidyTuesday 2025-05-20: Water Quality at Sydney Beaches\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
   }
 ]

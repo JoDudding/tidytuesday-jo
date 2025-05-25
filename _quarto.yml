@@ -29,6 +29,7 @@ execute:
   echo: false
   message: false
   warning: false
+  freeze: auto
 
 knitr:
   opts_chunk:
