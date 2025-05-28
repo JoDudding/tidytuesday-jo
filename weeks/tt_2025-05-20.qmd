@@ -176,8 +176,7 @@ ggsave("images/tt-2025-05-20-precipitation-days.png", width = 5, height = 3.5)
 
 
 ```{r}
-#| label: fig-leaflet-best-worst-2025
-#| fig-cap: Map of worst Enterococci bacteria level in 2025 by swim site
+#| label: water_qual
 
 library(leaflet, quietly = TRUE)
 library(gt, quietly = TRUE)
@@ -211,6 +210,21 @@ water_quality <- tt$water_quality |>
     ") |> 
       map(html)
   ) 
+
+worst_list <- water_quality |> 
+  slice_max(worst) |> 
+  as.list()
+```
+
+The worst Enterococci bacteria levels in 2025 were at 
+`r worst_list$swim_site`
+at 
+`r comma(worst_list$worst)`
+colony forming units (CFU) per 100 millilitres of water.
+
+```{r}
+#| label: fig-leaflet-best-worst-2025
+#| fig-cap: Map of worst Enterococci bacteria level in 2025 by swim site
 
 water_quality |> 
   leaflet() |> 
