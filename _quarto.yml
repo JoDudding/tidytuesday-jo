@@ -11,6 +11,8 @@ website:
     left:
       - href: index.qmd
         text: Home
+      - href: https://github.com/rfordatascience/tidytuesday
+        text: tidytuesday
     tools:
       - icon: github
         href: https://github.com/JoDudding/tidytuesday-jo

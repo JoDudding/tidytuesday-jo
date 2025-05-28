@@ -1,0 +1,55 @@
+---
+title: "#TidyTuesday 2023-09-26: Roy Kent F**k count"
+format: html
+---
+
+# Background
+
+For Deepsha Menghani's talk on [Data Viz animation and interactivity in Quarto](https://deepshamenghani.github.io/posit_plotly_crosstalk/#/title-slide), she watched each episode of Ted Lasso at 2X speed and diligently noted down every F*bomb and gesture reference, and then made it into the [richmondway R package](https://github.com/deepshamenghani/richmondway)!
+
+What is Ted Lasso and who is Roy Kent?
+
+[Ted Lasso](https://en.wikipedia.org/wiki/Ted_Lasso) is a TV show that "follows Ted Lasso, an American college football coach who is hired to coach an English soccer team with the secret intention that his inexperience will lead it to failure, but whose folksy, optimistic leadership proves unexpectedly successful."
+
+[Roy Kent](https://ted-lasso.fandom.com/wiki/Roy_Kent) is one of the main characters who goes from captain of AFC Richmond to one of the coaches. Particularly in early seasons, he's a man of few words, but many of them are f**k, expressed in various moods - mad, sad, happy, amused, loving, surprised, thoughtful, and joyous.
+
+This dataset includes the number, percentage, and context of f**k used in the show for each episode.
+
+```{r}
+#| label: setup
+#| echo: false
+#| message: false
+#| warning: false
+#| file: scripts/_setup.r
+
+```
+
+# Load the weekly data and check the [readme](https://github.com/rfordatascience/tidytuesday/tree/main/data/tt_year/2023-09-26)
+
+```{r}
+#| label: load-data
+#| include: false
+
+if(file.exists("data/tt_2023-09-26.rds")) {
+  # use the existing version if already downloaded
+  tt <- readRDS("data/tt_2023-09-26.rds")
+} else {
+  # otherwise download the datasets for the week
+  tt <- tt_load("2023-09-26")
+  saveRDS(tt, "data/tt_2023-09-26.rds")
+}
+
+map(tt, glimpse)
+
+```
+
+
+# Analyse
+
+```{r}
+#| label: tidy
+
+roy <- tt$richmondway
+
+```
+
