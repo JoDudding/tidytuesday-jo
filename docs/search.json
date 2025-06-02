@@ -1,5 +1,47 @@
 [
   {
+    "objectID": "weeks/tt_2025-05-27.html",
+    "href": "weeks/tt_2025-05-27.html",
+    "title": "#TidyTuesday 2025-05-27: Dungeons and Dragons Monsters (2024)",
+    "section": "",
+    "text": "This week we’re exploring monsters from the Dungeons & Dragons System Reference Document! After the popularity of our Dungeons and Dragons Spells (2024), we thought it might be fun to explore the freely available monsters from the 2024 update.\n\nEvery monster is a font of adventure. In this bestiary of Dungeons & Dragons monsters, you’ll discover the weird, the whimsical, the majestic, and the macabre. Choose your favorites, and make them part of your D&D play.\n\n\nWhich types of monsters have the highest (or lowest) of each ability score?\nWhich monster types have a broad range of challenger ratings?\nWhich language allows your character to communicate with the most monsters?\nHow else can the dataset be processed to pull out common fields?"
+  },
+  {
+    "objectID": "weeks/tt_2025-05-27.html#upset-plot-of-skills",
+    "href": "weeks/tt_2025-05-27.html#upset-plot-of-skills",
+    "title": "#TidyTuesday 2025-05-27: Dungeons and Dragons Monsters (2024)",
+    "section": "Upset plot of skills",
+    "text": "Upset plot of skills\nLet’s look at the common combinations of skills.\nPerception and Stealth are the most common skills.\n\n\n\n\n\n\n\n\nFigure 1: Upset plot for monster skills"
+  },
+  {
+    "objectID": "weeks/tt_2025-05-27.html#spider-plot",
+    "href": "weeks/tt_2025-05-27.html#spider-plot",
+    "title": "#TidyTuesday 2025-05-27: Dungeons and Dragons Monsters (2024)",
+    "section": "Spider plot",
+    "text": "Spider plot\n\n\n\n\n\n\n\n\nFigure 2: Spider plot of monster scores"
+  },
+  {
+    "objectID": "weeks/tt_2025-04-15.html",
+    "href": "weeks/tt_2025-04-15.html",
+    "title": "#TidyTuesday 2025-04-15: Base R Penguins",
+    "section": "",
+    "text": "Background\nThis week we’re taking another look at penguins! The Palmer Penguins dataset first appeared in TidyTuesday back in July of 2020. We’re using the dataset again because, as of R 4.5.0 (released this past Friday), the datasets are available in the base R datasets package!\n\nThe Palmer Penguins data, contained in the palmerpenguins R package as the penguins and penguins_raw data frames, have become popular for data exploration and visualisation, particularly in an educational context. … The data was originally published in Gorman et al. (2014). Their inclusion in the datasets package included in the base R distribution was motivated by Horst et al. (2022).\n\nAlso check out the {basepenguins} R package to convert scripts that use {palmerpenguins} to use the base R versions of the datasets.\n\n\nLoad the weekly data and check the readme\n\n\nAnalyse\n\n\n\n\n\n\n\n\nFigure 1: Palmer penguins species flipper length\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNumber of penguins by species and cluster\n\n\nSpecies\nCluster_1\nCluster_2\nCluster_3\n\n\n\n\nAdelie\n94\n52\n0\n\n\nChinstrap\n46\n22\n0\n\n\nGentoo\n0\n39\n80\n\n\n\nPalmer Penguins\n\n\n\n\n\n\n\n\n\nTable 1: Number of penguins by species and cluster\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 2: Palmer penguins species flipper length by bill length, with cluster centroids"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "tidytuesday-jo",
+    "section": "",
+    "text": "Website for my #tidytuesday experiments, playing with different data and packages.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTidyTuesday 2025-05-27: Dungeons and Dragons Monsters (2024)\n\n\n\n\n\n\n\n\n\n2025-06-02\n\n\n\n\n\n\n\n\n\n\n\n\n\nTidyTuesday 2025-05-20: Water Quality at Sydney Beaches\n\n\n\n\n\n\n\n\n\n2025-06-02\n\n\n\n\n\n\n\n\n\n\n\n\n\nTidyTuesday 2025-04-15: Base R Penguins\n\n\n\n\n\n\n\n\n\n2025-06-02\n\n\n\n\n\n\n\n\n\n\n\n\n\nTidyTuesday 2023-09-26: Roy Kent F**k count\n\n\n\n\n\n\n\n\n\n2025-06-02\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "weeks/tt_2023-09-26.html",
+    "href": "weeks/tt_2023-09-26.html",
+    "title": "#TidyTuesday 2023-09-26: Roy Kent F**k count",
+    "section": "",
+    "text": "Background\nFor Deepsha Menghani’s talk on Data Viz animation and interactivity in Quarto, she watched each episode of Ted Lasso at 2X speed and diligently noted down every F*bomb and gesture reference, and then made it into the richmondway R package!\nWhat is Ted Lasso and who is Roy Kent?\nTed Lasso is a TV show that “follows Ted Lasso, an American college football coach who is hired to coach an English soccer team with the secret intention that his inexperience will lead it to failure, but whose folksy, optimistic leadership proves unexpectedly successful.”\nRoy Kent is one of the main characters who goes from captain of AFC Richmond to one of the coaches. Particularly in early seasons, he’s a man of few words, but many of them are f**k, expressed in various moods - mad, sad, happy, amused, loving, surprised, thoughtful, and joyous.\nThis dataset includes the number, percentage, and context of f**k used in the show for each episode.\n\n\nLoad the weekly data and check the readme\n\n\nSeason changes\nIn the third season Roy Kent gave 105% more f*cks than in the first season, and other characters gave 112% more.\n\n\n\n\n\n\n\n\nFigure 1: F*cks per episode over seasons\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nStatistics on the total number of f*cks per season\n\n\nStatistic\nSeason 1\nSeason 2\nSeason 3\nTotal\n\n\n\n\nMinimum\n8.0\n6.0\n17.0\n6.0\n\n\nP25\n13.0\n12.0\n24.0\n13.0\n\n\nMedian\n14.0\n15.5\n30.5\n18.0\n\n\nP75\n17.8\n19.0\n39.8\n29.0\n\n\nMaximum\n22.0\n44.0\n46.0\n46.0\n\n\nMean\n15.0\n17.9\n31.4\n21.8\n\n\nLCI\n5.6\n-2.9\n11.1\n-0.8\n\n\nUCI\n24.4\n38.8\n51.8\n44.4\n\n\n\n{richmondway} R package\n\n\n\n\n\n\n\n\n\nTable 1: Statistics on the total number of f*cks per season\n\n\n\n\n\n\nIMDB\nThere is no correlation between the number of f*cks and the IMDB rating overall, and only a weak relationship within each season.\n\n\n\n\n\n\n\n\n\n\n\nPearson's correlation of number of f*cks and IMDB rating\n\n\nSeason\nCorrelation\nP-value\nStrength\n\n\n\n\nSeason 1\n46.3%\n0.18\nWeak relationship\n\n\nSeason 2\n35.6%\n0.26\nWeak relationship\n\n\nSeason 3\n31.4%\n0.32\nWeak relationship\n\n\nTotal\n17.0%\n0.34\nNo relationship\n\n\n\n{richmondway} R package\n\n\n\n\n\n\n\n\n\nTable 2: Pearson’s correlation of number of f*cks and IMDB rating.\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 2: F*cks vs IMDB rating\n\n\n\n\n\nThe IMDB ratings drop each season.\n\n\n\n\n\n\n\n\nFigure 3: Boxplot of IMDB ratings by season"
+  },
+  {
     "objectID": "weeks/tt_2025-05-20.html",
     "href": "weeks/tt_2025-05-20.html",
     "title": "#TidyTuesday 2025-05-20: Water Quality at Sydney Beaches",
@@ -19,19 +61,5 @@
     "title": "#TidyTuesday 2025-05-20: Water Quality at Sydney Beaches",
     "section": "Water quality",
     "text": "Water quality\nThe worst Enterococci bacteria levels in 2025 were at Wentworth Falls Lake - Jetty at 15,000 colony forming units (CFU) per 100 millilitres of water.\n\n\n\n\n\n\n\n\nFigure 4: Map of worst Enterococci bacteria level in 2025 by swim site"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "tidytuesday-jo",
-    "section": "",
-    "text": "Website for my #tidytuesday experiments, playing with different data and packages.\n\n\n\n\n\n\nTODO\n\n\n\nCurrently working on the setup\n\nMake charts fit the space\nGithub pages\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTidyTuesday 2023-09-26: Roy Kent F**k count\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTidyTuesday 2025-05-20: Water Quality at Sydney Beaches\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "weeks/tt_2023-09-26.html",
-    "href": "weeks/tt_2023-09-26.html",
-    "title": "#TidyTuesday 2023-09-26: Roy Kent F**k count",
-    "section": "",
-    "text": "Background\nFor Deepsha Menghani’s talk on Data Viz animation and interactivity in Quarto, she watched each episode of Ted Lasso at 2X speed and diligently noted down every F*bomb and gesture reference, and then made it into the richmondway R package!\nWhat is Ted Lasso and who is Roy Kent?\nTed Lasso is a TV show that “follows Ted Lasso, an American college football coach who is hired to coach an English soccer team with the secret intention that his inexperience will lead it to failure, but whose folksy, optimistic leadership proves unexpectedly successful.”\nRoy Kent is one of the main characters who goes from captain of AFC Richmond to one of the coaches. Particularly in early seasons, he’s a man of few words, but many of them are f**k, expressed in various moods - mad, sad, happy, amused, loving, surprised, thoughtful, and joyous.\nThis dataset includes the number, percentage, and context of f**k used in the show for each episode.\n\n\nLoad the weekly data and check the readme\n\n\nAnalyse"
   }
 ]

@@ -1,0 +1,17 @@
+{
+  "hash": "3457ccb9e212dc95adfd7232168cc996",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"#TidyTuesday 2025-05-27: Dungeons and Dragons Monsters (2024)\"\nformat: html\nimage: ../images/tt-2025-05-27-spider-scores.png\ndate: 2025-06-02\n---\n\n# Background\n\nThis week we're exploring monsters from the Dungeons & Dragons System Reference Document! After the popularity of our [Dungeons and Dragons Spells (2024)](https://tidytues.day/2024/2024-12-17), we thought it might be fun to explore the freely available monsters from the 2024 update.\n\n> Every monster is a font of adventure. In this bestiary of Dungeons & Dragons monsters, you’ll discover the weird, the whimsical, the majestic, and the macabre. Choose your favorites, and make them part of your D&D play.\n\n- Which types of monsters have the highest (or lowest) of each ability score?\n- Which monster types have a broad range of challenger ratings?\n- Which language allows your character to communicate with the most monsters?\n- How else can the dataset be processed to pull out common fields?\n\n\n::: {.cell}\n\n:::\n\n\n# Load the weekly data and check the [readme](https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-05-27)\n\n\n\n# Analyse\n\n## Upset plot of skills\n\nLet's look at the common combinations of skills.\n\nPerception and Stealth are the most common skills.\n\n\n::: {.cell}\n::: {.cell-output-display}\n![Upset plot for monster skills](tt_2025-05-27_files/figure-html/fig-upset-1.png){#fig-upset width=2100}\n:::\n:::\n\n\n## Spider plot\n\n\n::: {.cell}\n::: {.cell-output-display}\n![Spider plot of monster scores](tt_2025-05-27_files/figure-html/fig-spider-1.png){#fig-spider width=2100}\n:::\n:::\n\n",
+    "supporting": [
+      "tt_2025-05-27_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -12,10 +12,35 @@ source("scripts/_setup.r")
 
 tt_week <- tt_available()
 
+#--- ideas ---
+
+#' leaflet
+#' animated chart
+#' interactive chart
+#' api call
+#' upset chart
+#' spider chart
+#' model types
+#' dashboard
+#' survey likert
+#' clustering - https://tidyclust.tidymodels.org/
+#' survival - https://www.tidyverse.org/blog/2024/04/tidymodels-survival-analysis/
+#' interesting packages
+#' shiny
+#' quarto code cell chunks
+#' time series forecasting
+#' bayesian
+#' arrow
+#' duckdb
+#' llm with elmer
+#' hex map nz
+#' text analysis
+
 #--- Base R Penguins ---
 
 #peng <- tt_load("2025-04-15")
 #walk(peng, glimpse)
+#use_tt_template("2025-04-15")
 
 #--- Seismic Events at Mount Vesuvius ---
 
@@ -80,6 +105,8 @@ walk(solar_wind, glimpse)
 stack <- tt_load("2024-09-03")
 walk(stack, glimpse)
 
-
+#--- D&D Monsters ---
+dnd <- tt_load("2025-05-27")
+walk(dnd, glimpse)
 
 #-------------------------------------------------------------------------------

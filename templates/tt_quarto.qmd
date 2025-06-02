@@ -1,6 +1,8 @@
 ---
 title: "#TidyTuesday tt_date: {ADD TITLE}"
 format: html
+image: ../images/tt-tt_date-xxx.png
+date: tt_today
 ---
 
 # Background
@@ -39,8 +41,11 @@ map(tt, glimpse)
 # Analyse
 
 ```{r}
-#| label: tidy
+#| label: fig-plot
+#| fig-cap: Plot title
 
+
+gg_preview("tt-tt_date-xxx")
 
 ```
 

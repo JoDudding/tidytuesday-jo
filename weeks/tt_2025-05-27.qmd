@@ -1,0 +1,281 @@
+---
+title: "#TidyTuesday 2025-05-27: Dungeons and Dragons Monsters (2024)"
+format: html
+image: ../images/tt-2025-05-27-spider-scores.png
+date: 2025-06-02
+---
+
+# Background
+
+This week we're exploring monsters from the Dungeons & Dragons System Reference Document! After the popularity of our [Dungeons and Dragons Spells (2024)](https://tidytues.day/2024/2024-12-17), we thought it might be fun to explore the freely available monsters from the 2024 update.
+
+> Every monster is a font of adventure. In this bestiary of Dungeons & Dragons monsters, you’ll discover the weird, the whimsical, the majestic, and the macabre. Choose your favorites, and make them part of your D&D play.
+
+- Which types of monsters have the highest (or lowest) of each ability score?
+- Which monster types have a broad range of challenger ratings?
+- Which language allows your character to communicate with the most monsters?
+- How else can the dataset be processed to pull out common fields?
+
+```{r}
+#| label: setup
+#| echo: false
+#| message: false
+#| warning: false
+#| file: scripts/_setup.r
+```
+
+# Load the weekly data and check the [readme](https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-05-27)
+
+```{r}
+#| label: load-data
+#| include: false
+
+library(UpSetR)
+library(patchwork)
+
+if (file.exists("data/tt_2025-05-27.rds")) {
+  # use the existing version if already downloaded
+  tt <- readRDS("data/tt_2025-05-27.rds")
+} else {
+  # otherwise download the datasets for the week
+  tt <- tt_load("2025-05-27")
+  saveRDS(tt, "data/tt_2025-05-27.rds")
+}
+
+dnd <- tt$monsters |>
+  mutate(
+    alignment = factor(alignment, levels = c(
+      "Lawful Good", "Lawful Neutral",
+      "Lawful Evil", "Neutral Good", "Neutral", "Neutral Evil", "Chaotic Good",
+      "Chaotic Neutral", "Chaotic Evil", "Unaligned"
+    ))
+  )
+
+# glimpse(dnd)
+
+# count(dnd, alignment)
+```
+
+# Analyse
+
+## Upset plot of skills
+
+Let's look at the common combinations of skills.
+
+Perception and Stealth are the most common skills.
+
+```{r}
+#| label: fig-upset
+#| fig-cap: Upset plot for monster skills
+
+dnd_skill <- dnd |>
+  select(name, skills) |>
+  filter(!is.na(skills)) |>
+  mutate(skills = str_split(skills, ", ")) |>
+  unnest_longer(skills) |>
+  separate(skills, into = c("skill", "points"), sep = " +")
+
+# dnd_skill |>
+#  count(skill, sort = TRUE)
+
+up_p <- dnd_skill |>
+  transmute(
+    name, skill,
+    have = 1
+  ) |>
+  spread(key = skill, value = have, fill = 0) |>
+  as.data.frame() |>
+  UpSetR::upset(
+    nsets = 6, number.angles = 20,
+    mainbar.y.label = "Skill Intersections",
+    sets.x.label = "Monsters Per Skill",
+    order.by = "freq"
+  )
+
+up_p #+ # adding title this way does not work
+#  plot_annotation(
+#    title = "D&D monster skills upset plot",
+#    caption = "Source: www.dndbeyond.com"
+#  )
+```
+
+## Spider plot
+
+```{r}
+#| label: fig-spider
+#| fig-cap: Spider plot of monster scores
+
+dnd_max <- dnd |>
+  bind_rows(select(dnd, -alignment)) |>
+  group_by(alignment) |>
+  summarise(
+    across(str:cha, mean)
+  ) |> 
+  select(-alignment) |> 
+  gather() |> 
+  mutate(value = max(value)) |> 
+  distinct() |> 
+  spread(key = key, value = value)
+
+dnd_min <- dnd |>
+  bind_rows(select(dnd, -alignment)) |>
+  group_by(alignment) |>
+  summarise(
+    across(str:cha, mean)
+  ) |> 
+  select(-alignment) |> 
+  gather() |> 
+  mutate(value = min(value)) |> 
+  distinct() |> 
+  spread(key = key, value = value)
+
+dnd_align_avg <- dnd |>
+  filter(alignment != "Unaligned") |>
+  bind_rows(select(dnd, -alignment)) |>
+  group_by(alignment) |>
+  summarise(across(str:cha, mean)) |>
+  ungroup() |>
+  mutate(
+   alignment = fct_na_value_to_level(alignment, "Total")
+  ) |> 
+  bind_rows(dnd_max) |> 
+  mutate(
+   alignment = fct_na_value_to_level(alignment, "max")
+  ) |> 
+  bind_rows(dnd_min) |> 
+  mutate(
+   alignment = fct_na_value_to_level(alignment, "min")
+  ) |> 
+  rename(
+    Strength = str,
+    Dexterity = dex,
+    Constitution = con,
+    Intelligence = int,
+    Wisdom = wis,
+    Charisma = cha
+  )
+
+circle_coords <- function(r, n_axis = ncol(dnd_align_avg) - 1) {
+  fi <- seq(0, 2 * pi, (1 / n_axis) * 2 * pi) + pi / 2
+  x <- r * cos(fi)
+  y <- r * sin(fi)
+
+  tibble(x, y, r)
+}
+
+central_distance <- 0.2
+
+step_1 <- map_df(seq(0, 1, 0.25) + central_distance, circle_coords) |>
+  ggplot(aes(x, y)) +
+  geom_polygon(
+    data = circle_coords(1 + central_distance),
+    alpha = 1, fill = "gray97"
+  ) +
+  geom_path(aes(group = r), lty = 2, alpha = 0.5) +
+  theme_void()
+
+axis_coords <- function(n_axis) {
+  fi <- seq(0, (1 - 1 / n_axis) * 2 * pi, (1 / n_axis) * 2 * pi) + pi / 2
+  x1 <- central_distance * cos(fi)
+  y1 <- central_distance * sin(fi)
+  x2 <- (1 + central_distance) * cos(fi)
+  y2 <- (1 + central_distance) * sin(fi)
+
+  tibble(x = c(x1, x2), y = c(y1, y2), id = rep(1:n_axis, 2))
+}
+
+step_2 <- step_1 +
+  geom_line(
+    data = axis_coords(ncol(dnd_align_avg) - 1),
+    aes(x, y, group = id), alpha = 0.3
+  )
+
+text_data <- dnd_align_avg |>
+  select(-alignment) |>
+  map_df(~ min(.) + (max(.) - min(.)) * seq(0, 1, 0.25)) |>
+  mutate(r = seq(0, 1, 0.25)) |>
+  pivot_longer(-r, names_to = "parameter", values_to = "value")
+
+text_coords <- function(r, n_axis = ncol(dnd_align_avg) - 1) {
+  fi <- seq(0, (1 - 1 / n_axis) * 2 * pi, (1 / n_axis) * 2 * pi) + pi / 2 + 0.01 * 2 * pi / r
+  x <- r * cos(fi)
+  y <- r * sin(fi)
+
+  tibble(x, y, r = r - central_distance)
+}
+
+labels_data <- map_df(seq(0, 1, 0.25) + central_distance, text_coords) |>
+  bind_cols(text_data |> select(-r))
+
+step_3 <- step_2 +
+  # geom_text(data = labels_data, aes(x, y, label = value), alpha = 0.65) +
+  geom_text(
+    data = text_coords(1 + central_distance + 0.2), aes(x, y),
+    label = labels_data$parameter[1:(ncol(dnd_align_avg) - 1)]
+  )
+
+rescaled_coords <- function(r, n_axis) {
+  fi <- seq(0, 2 * pi, (1 / n_axis) * 2 * pi) + pi / 2
+  tibble(r, fi) |>
+    mutate(x = r * cos(fi), y = r * sin(fi)) |>
+    select(-fi)
+}
+
+rescaled_data <- dnd_align_avg |>
+  mutate(across(-alignment, rescale)) %>%
+  mutate(copy = pull(., 2)) |>
+  pivot_longer(-alignment, names_to = "parameter", values_to = "value") |>
+  group_by(alignment) |>
+  mutate(coords = rescaled_coords(
+    value + central_distance,
+    ncol(dnd_align_avg) - 1
+  )) |>
+  unnest(cols = c(coords))
+
+rescaled_data_ex <- rescaled_data |>
+  filter(! alignment %in% c("Total", "max", "min"))
+
+rescaled_data_tot <- rescaled_data |>
+  filter(alignment == "Total")
+
+fct_p <- step_2 +
+  geom_point(
+    data = rescaled_data_ex,
+    aes(x, y, group = alignment),
+    size = 3
+  ) +
+  geom_path(
+    data = rescaled_data_ex,
+    aes(x, y, group = alignment),
+    size = 1
+  ) +
+  facet_wrap(~alignment) +
+  guides(col = "none") +
+  coord_fixed()
+
+
+tot_p <- step_3 +
+  geom_point(
+    data = rescaled_data_tot,
+    aes(x, y, group = alignment),
+    size = 3
+  ) +
+  geom_path(
+    data = rescaled_data_tot,
+    aes(x, y, group = alignment),
+    size = 1
+  ) +
+  scale_x_continuous(expand = expansion(mult = c(0.1, 0.1))) +
+  scale_y_continuous(expand = expansion(mult = c(0.1, 0.1))) +
+  facet_wrap(~alignment) +
+  guides(col = "none") +
+  coord_fixed()
+
+fct_p + tot_p +
+  plot_annotation(
+    title = "Spider plot of monster scores in D&D",
+    caption = "Source: www.dndbeyond.com"
+  )
+
+gg_preview("tt-2025-05-27-spider-scores")
+```

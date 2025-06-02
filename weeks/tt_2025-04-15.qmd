@@ -1,0 +1,118 @@
+---
+title: "#TidyTuesday 2025-04-15: Base R Penguins"
+format: html
+image: ../images/tt-2025-04-15-cluster-centroids.png
+date: 2025-06-02
+---
+
+# Background
+
+This week we're taking another look at penguins! The Palmer Penguins dataset first appeared in TidyTuesday back in [July of 2020](https://github.com/rfordatascience/tidytuesday/blob/main/data/2020/2020-07-28/readme.md). We're using the dataset again because, as of R 4.5.0 (released this past Friday), the datasets are available in the base R datasets package!
+
+> The Palmer Penguins data, contained in the palmerpenguins R package as the penguins and penguins_raw data frames, have become popular for data exploration and visualisation, particularly in an educational context. ... The data was originally published in Gorman et al. (2014). Their inclusion in the datasets package included in the base R distribution was motivated by Horst et al. (2022).
+
+Also check out the {basepenguins} R package to convert scripts that use [{palmerpenguins}](https://ellakaye.github.io/basepenguins/) to use the base R versions of the datasets.
+
+```{r}
+#| label: setup
+#| echo: false
+#| message: false
+#| warning: false
+#| file: scripts/_setup.r
+
+```
+
+# Load the weekly data and check the [readme](https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-04-15)
+
+```{r}
+#| label: load-data
+#| include: false
+
+library(tidyclust)
+library(gt)
+
+# glimpse(penguins)
+
+```
+
+# Analyse
+
+
+```{r}
+#| label: fig-penguin-hist
+#| fig-cap: Palmer penguins species flipper length
+
+penguins |> 
+  filter(! is.na(flipper_len)) |> 
+  ggplot(aes(flipper_len)) +
+  geom_histogram(binwidth = 3) +
+  facet_wrap(~species, ncol = 1) +
+  scale_y_c() +
+  labs(
+    x = "Flipper length",
+    y = "Count",
+    title = "Gentoo penguins have the longest flippers",
+    subtitle = "Distribution of flipper length by penguin species",
+    caption = "Source: Palmer Penguins"
+  )
+
+```
+
+```{r}
+#| label: tbl-clusters-penguins
+#| tbl-cap: Number of penguins by species and cluster
+
+set.seed(348)
+
+penguins_nonmiss <- penguins |> 
+  drop_na()
+
+kmeans_spec <- k_means(num_clusters = 3) |> 
+  set_engine("stats")
+
+kmeans_spec_fit <- kmeans_spec |> 
+  fit(~., data = select(penguins_nonmiss, -species, -year))
+
+penguins_predicted <- penguins_nonmiss |> 
+  bind_cols(predict(kmeans_spec_fit, penguins_nonmiss))
+
+penguins_predicted |> 
+  count(Species = species, predicted_species = .pred_cluster) |> 
+  spread(key = predicted_species, value = n, fill = 0) |> 
+  gt() |> 
+  tab_options(table.align = "left")|> 
+  tab_header(title = "Number of penguins by species and cluster") |> 
+  tab_source_note(source_note = "Palmer Penguins")
+
+penguins_centroids <- extract_centroids(kmeans_spec_fit)
+
+```
+
+
+```{r}
+#| label: fig-penguin-scatter
+#| fig-cap: Palmer penguins species flipper length by bill length, with cluster centroids
+
+penguins_predicted |> 
+  mutate(type = "Penguin") |> 
+  bind_rows(rename(penguins_centroids, species = .cluster)) |> 
+  mutate(type = coalesce(type, "Cluster")) |> 
+  ggplot(aes(flipper_len, bill_len, colour = species, size = type)) +
+  geom_point() +
+  scale_x_continuous(label = comma) +
+  scale_y_continuous(label = comma) +
+  scale_colour_pulse_d() +
+  scale_size_manual(values = c(5, 1)) +
+  labs(
+    x = "Flipper length",
+    y = "Bill length",
+    colour = NULL,
+    size = NULL,
+    title = "The cluster centroids seem to separate the Adelie and Gentoo well",
+    subtitle = "Flipper length vs bill length by penguin species",
+    caption = "Source: Palmer Penguins"
+  )
+
+gg_preview("tt-2025-04-15-cluster-centroids")
+
+```

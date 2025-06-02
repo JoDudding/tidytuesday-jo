@@ -2,6 +2,7 @@
 title: "#TidyTuesday 2025-05-20: Water Quality at Sydney Beaches"
 format: html
 image: ../images/tt-2025-05-20-precipitation-days.png
+date: 2025-06-02
 ---
 
 # Background
@@ -30,6 +31,9 @@ The dataset this week includes both water quality and [historical weather data](
 #| label: load-data
 #| include: false
 
+library(leaflet, quietly = TRUE)
+library(gt, quietly = TRUE)
+
 if(file.exists("data/tt_2025-05-20.rds")) {
   tt <- readRDS("data/tt_2025-05-20.rds")
 } else {
@@ -38,7 +42,7 @@ if(file.exists("data/tt_2025-05-20.rds")) {
   saveRDS(tt, "data/tt_2025-05-20.rds")
 }
 
-map(tt, glimpse)
+#map(tt, glimpse)
 
 ```
 
@@ -103,7 +107,8 @@ cum_annual_rainfall |>
     title = "Cummulative annual rainfall for Sydney",
     subtitle = glue(
       "{min(cum_annual_rainfall$year)}-{max(cum_annual_rainfall$year)}"
-    )
+    ),
+    caption = "Source: Beachwatch.nsw.gov.au"
   ) +
   guides(linewidth = "none")
 
@@ -128,7 +133,8 @@ cum_annual_rainfall |>
     x = "Year",
     y = "Annual rainfall",
     title = "Annual rainfall has been increasing",
-    subtitle = "Trend of annual rainfall for Sydney"
+    subtitle = "Trend of annual rainfall for Sydney",
+    caption = "Source: Beachwatch.nsw.gov.au"
   )
 
 ```
@@ -159,17 +165,17 @@ cum_annual_rainfall |>
   geom_hline(yintercept = (1:10) * 0.1, colour = pulse$light, linewidth = 0.15) +
   scale_x_continuous(breaks = seq(1990, 2030, by = 5)) +
   scale_y_c(label = percent, breaks = (1:10) * 0.1) +
-  scale_fill_manual(values = pulse$primary_gradient(7)) +
+  scale_fill_manual(values = pp_gradient(7)) +
   labs(
     x = "Year",
     y = "% of days",
     fill = "Precipitation",
     title = "The percent of days with no rain is declining",
-    subtitle = "Distribution of precipitation per day in Sydney over time"
+    subtitle = "Distribution of precipitation per day in Sydney over time",
+    caption = "Source: Beachwatch.nsw.gov.au"
   )
 
-ggsave("images/tt-2025-05-20-precipitation-days.png", width = 5, height = 3.5)
-
+gg_preview("tt-2025-05-20-precipitation-days")
 ```
 
 ## Water quality
@@ -177,9 +183,6 @@ ggsave("images/tt-2025-05-20-precipitation-days.png", width = 5, height = 3.5)
 
 ```{r}
 #| label: water_qual
-
-library(leaflet, quietly = TRUE)
-library(gt, quietly = TRUE)
 
 water_quality <- tt$water_quality |> 
   filter(year(date) == max(year(date))) |> 
@@ -193,13 +196,13 @@ water_quality <- tt$water_quality |>
   ungroup() |> 
   mutate(
     worst_colour = case_when(
-      worst > 2500 ~ pulse$primary_gradient(7)[2],
-      worst > 1000 ~ pulse$primary_gradient(7)[3],
-      worst >  500 ~ pulse$primary_gradient(7)[4],
-      worst >  250 ~ pulse$primary_gradient(7)[5],
-      worst >  100 ~ pulse$primary_gradient(7)[6],
-      worst >   50 ~ pulse$primary_gradient(7)[7],
-      TRUE ~ pulse$primary_gradient(7)[1]
+      worst > 2500 ~ pp_gradient(7)[2],
+      worst > 1000 ~ pp_gradient(7)[3],
+      worst >  500 ~ pp_gradient(7)[4],
+      worst >  250 ~ pp_gradient(7)[5],
+      worst >  100 ~ pp_gradient(7)[6],
+      worst >   50 ~ pp_gradient(7)[7],
+      TRUE ~ pp_gradient(7)[1]
     ),
     label = glue("
     <strong>{swim_site}</strong><br>
@@ -236,10 +239,6 @@ water_quality |>
     fillOpacity = 0.8,
     label = ~label
   )
-
-
-
-
 
 ```
 

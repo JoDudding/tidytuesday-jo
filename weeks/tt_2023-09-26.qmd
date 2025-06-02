@@ -1,6 +1,8 @@
 ---
 title: "#TidyTuesday 2023-09-26: Roy Kent F**k count"
 format: html
+image: ../images/tt-2023-09-26-imdb-boxplot.png
+date: 2025-06-02
 ---
 
 # Background
@@ -24,7 +26,7 @@ This dataset includes the number, percentage, and context of f**k used in the sh
 
 ```
 
-# Load the weekly data and check the [readme](https://github.com/rfordatascience/tidytuesday/tree/main/data/tt_year/2023-09-26)
+# Load the weekly data and check the [readme](https://github.com/rfordatascience/tidytuesday/tree/main/data/2023/2023-09-26)
 
 ```{r}
 #| label: load-data
@@ -39,17 +41,194 @@ if(file.exists("data/tt_2023-09-26.rds")) {
   saveRDS(tt, "data/tt_2023-09-26.rds")
 }
 
-map(tt, glimpse)
+roy <- tt$richmondway |> 
+  janitor::clean_names()
 
+#glimpse(roy)
 ```
 
 
-# Analyse
+# Season changes
 
 ```{r}
-#| label: tidy
+#| label: season-avg
 
-roy <- tt$richmondway
+tot_f <- roy |> 
+  transmute(
+    season,
+    episode,
+    season_episode = str_replace(season_episode, "_", "\n"), 
+    "Roy Kent" = f_count_rk, 
+    "Others" = f_count_total - f_count_rk
+  )
+
+tot_f_mean <- tot_f |> 
+  group_by(season) |> 
+  summarise(
+    across(3:4, mean)
+  ) |> 
+  ungroup() |> 
+  mutate(
+    episode = 99,
+    season_episode = paste0("S", season, "\n-")
+  )
+
+
+increase_rk <- percent(last(tot_f_mean$`Roy Kent`) / 
+  first(tot_f_mean$`Roy Kent`) - 1)
+
+increase_others <- percent(last(tot_f_mean$Others) / 
+  first(tot_f_mean$Others) - 1)
 
 ```
+
+In the third season Roy Kent gave 
+`r increase_rk`
+more f*cks than in the first season, and other characters gave
+`r increase_others`
+more.
+
+```{r}
+#| label: fig-season-fcks
+#| fig-cap: F*cks per episode over seasons
+
+tot_f |> 
+  bind_rows(tot_f_mean) |> 
+  arrange(season, episode) |> 
+  mutate(season_episode = fct_inorder(season_episode)) |> 
+  select(-season, -episode) |> 
+  gather(2:3, key = "Person", value = "number") |> 
+  mutate(
+    flag_mean = case_when(str_detect(season_episode, "mean") ~ pulse$dark)
+  ) |> 
+  ggplot(aes(season_episode, number, fill = Person, colour = flag_mean)) +
+  geom_col(linewidth = 0.6) +
+  scale_fill_pulse_d("base") +
+  scale_colour_identity() +
+  labs(
+    x = NULL, y = NULL, fill = NULL,
+    title = "The amount of f*cks increases each season",
+    caption = "Source: {richmondway} R package"
+  )
+
+```
+
+
+```{r}
+#| label: tbl-fck-stats
+#| tbl-cap: Statistics on the total number of f*cks per season
+
+roy |> 
+  group_by(season = paste("Season", season)) |> 
+  bind_rows(mutate(roy, season = "Total")) |> 
+  summaryx(f_count_total) |> 
+  select(
+    season, Minimum = min, P25 = p25, Median = median,
+    P75 = p75, Maximum = max,
+    Mean = mean, LCI  = lci_95, UCI  = uci_95
+  ) |> 
+  gather(-season, key = "Statistic", value = "value") |> 
+  mutate(value = comma(value, 0.1)) |> 
+  mutate(Statistic = fct_inorder(Statistic)) |> 
+  spread(key = season, value = value) |> 
+  gt() |>
+  tab_options(table.align = "left") |> 
+  tab_header(title = "Statistics on the total number of f*cks per season") |> 
+  tab_source_note(source_note = "{richmondway} R package")
+
+```
+
+
+# IMDB
+
+There is no correlation between the number of f*cks and the IMDB rating overall, and only a weak relationship within each season.
+
+```{r}
+#| label: tbl-imdb-cor
+#| tbl-cap: Pearson's correlation of number of f*cks and IMDB rating.
+
+corr <- function(data, var1, var2) {
+  cor.test(
+      x = data |> dplyr::pull({{var1}}),
+      y = data |> dplyr::pull({{var2}})
+    ) |>
+    broom::tidy()
+}
+
+roy |> 
+  mutate(season = paste("Season", season)) |> 
+  bind_rows(mutate(roy, season = "Total")) |> 
+  group_by(season) |> 
+  nest() |> 
+  summarise(
+    corr = map(data, ~corr(.x, f_count_total, imdb_rating))
+  ) |> 
+  unnest(corr) |> 
+  transmute(
+    Season = season,
+    Correlation = percent(estimate),
+    `P-value` = comma(p.value, 0.01),
+    Strength = case_when(
+      abs(estimate) < 0.25 ~ 'No relationship',
+      abs(estimate) < 0.50 ~ 'Weak relationship',
+      abs(estimate) < 0.75 ~ 'Moderate relationship',
+      TRUE ~ 'Strong relationship'
+    )
+  ) |> 
+  gt() |> 
+  tab_options(table.align = "left") |> 
+  tab_header(
+    title = "Pearson's correlation of number of f*cks and IMDB rating"
+  ) |> 
+  tab_source_note(source_note = "{richmondway} R package")
+
+```
+
+```{r}
+#| label: fig-vs-imdb
+#| fig-cap: F*cks vs IMDB rating
+
+roy |> 
+  mutate(season = paste("Season", season)) |> 
+  ggplot(aes(f_count_total, imdb_rating, colour = season)) +
+  geom_point(aes(colour = factor(season))) +
+  geom_smooth(method = "lm", se = FALSE, formula = "y ~ x") +
+  scale_colour_pulse_d("other") +
+  scale_fill_pulse_d("other") +
+  labs(
+    x = "Number of f*cks",
+    y = "IMBD rating",
+    colour = NULL,
+    colour = "Season",
+    title = "IMBD rating is not correlated with the number of f*cks",
+    caption = "Source: {richmondway} R package"
+  )
+
+```
+
+The IMDB ratings drop each season.
+
+```{r}
+#| label: fig-imdb-boxplot
+#| fig-cap: Boxplot of IMDB ratings by season
+
+roy |> 
+  mutate(season = paste("Season", season)) |> 
+  ggplot(aes(season, imdb_rating, fill = season, colour = season)) +
+  geom_boxplot(alpha = 0.5) +
+  scale_fill_pulse_d() +
+  scale_colour_pulse_d() +
+  guides(fill = "none") +
+  labs(
+    x = NULL, y = "IMBD rating", fill = NULL, colour = NULL,
+    title = "The first season had the highest ratings",
+    caption = "Source: {richmondway} R package"
+  ) +
+  guides(fill = "none", colour = "none")
+
+
+gg_preview("tt-2023-09-26-imdb-boxplot")
+
+```
+
 

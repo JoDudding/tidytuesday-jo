@@ -27,6 +27,11 @@ format:
     embed-resources: true
     fig-cap-location: margin
     tbl-cap-location: margin
+    fig-width: 7
+    fig-height: 5
+    fig-dpi: 300
+    fig-align: left
+    out-width: 100%
 
 execute:     
   echo: false
